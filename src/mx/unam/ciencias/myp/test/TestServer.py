@@ -3,8 +3,8 @@ import sys
 import socket
 import threading
 import unittest
-#import Client
-#import Server
+import Client
+import Server
 
 class TestServer(unittest.TestCase):
 
