@@ -8,12 +8,6 @@ import Server
 
 class TestServer(unittest.TestCase):
 
-    def testCreatSocket(self):
-        pass
-
-    def testCreatThreading(self):
-        pass
-
     def testGetAddress(self):
         self.server = Server.Server("localhost", 3456)
         self.server.setAddress("localhost", 3459)
@@ -22,8 +16,8 @@ class TestServer(unittest.TestCase):
 
     def testSetAddress(self):
         self.server = Server.Server("localhost", 3456)
-        self.server.setAddress("localhost", 3458)
-        self.assertEqual(("localhost", 3458), self.server.getAddress())
+        self.server.setAddress(("localhost", 3457))
+        self.assertEqual(("localhost", 3457), self.server.getAddress())
         self.server.getSocket().close()
 
     def testSetSocket(self):
@@ -36,11 +30,20 @@ class TestServer(unittest.TestCase):
 
     def testGetSocket(self):
         self.serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server = Server.Server("localhost", 2345)
+        self.server = Server.Server("localhost", 3456)
         self.server.setSocket(self.serverSocket)
         self.assertEqual(self.serverSocket, self.server.getSocket())
         self.serverSocket.close()
         self.server.getSocket().close()
+
+    def testRunServer(self):
+        pass
+
+    def testCreatSocket(self):
+        pass
+
+    def testCreatThreading(self):
+        pass
 
     def testMsgAll(self):
         pass

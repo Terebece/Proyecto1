@@ -2,8 +2,8 @@ import unittest
 import threading
 import socket
 import sys
-import Client
-import Server
+from myp import Client
+from myp import Server
 
 class TestCliente(unittest.TestCase):
 
@@ -35,14 +35,17 @@ class TestCliente(unittest.TestCase):
         self.clientSocket.close()
         self.client.getSocket().close()
 
-        def testCreatThreading(self):
-            pass
+    def testRunClient():
+        pass
 
-        def testMsgRecv(self):
-            pass
+    def testCreatThreading(self):
+        pass
 
-        def testSendMsg(self):
-            pass
+    def testMsgRecv(self):
+        pass
+
+    def testSendMsg(self):
+        pass
 
 if __name__ == "__main__":
     unittest.main()
