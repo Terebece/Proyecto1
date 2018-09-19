@@ -16,16 +16,18 @@ para podamos interactuar con los clientes, los clientes tendran una interfaz gr�
 * interfaz gráfica: Tkinter
 
 ## Ejecutar chat
-Lo primero que debe hacer es ejecutar al servidor utilizando el comando
+Para ejecutar el chat, primero tiene que ejecutar el servidor utilizando el siguiente comando
 
     ./server.sh
 
-A continuación ejecute el cliente
+A continuación ejecute el cliente con el comando
 
     ./client.sh
+    
+La documentación se generará en los comandos anteriores 
 
 ## Pruebas Unitarias
 
 Para ejecutar las pruebas unitarias utilice el comando
 
-    ./pruebas.sh
+    ./test.sh
