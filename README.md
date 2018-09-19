@@ -1,23 +1,28 @@
-# Proyecto1: Chat con Go
+# Proyecto1: Chat con Python
 
 * Universidad Nacional Autónoma de México
-* Facultad de Ciencias 
+* Facultad de Ciencias
 * Modelado y Programación
 * Becerril Torres Teresa
 
-En este proyecto se realizará un chat en Go, en el cual crearemos un servidor 
-y un cliente para interactuar con los demás clientes. 
+En este proyecto se realizará un chat en Python, en el cual crearemos un servidor
+para podamos interactuar con los clientes, los clientes tendran una interfaz gráfica.
 
 ## Requisitos
 
-* Lenguaje: Go
-* Versión: go1.10.3 darwin/amd64 
-* Pruebas Unitarias: testing
+* Lenguaje: Python
+* Versión: 3.7.0
+* Pruebas Unitarias: unittest
+* interfaz gráfica: Tkinter
 
-Para compilar y ejecutar el programa se ocupara el comando 
+## Ejecutar chat
+Lo primero que debe hacer es ejecutar al servidor utilizando el comando
+    ./server.sh
 
-    go run main.go
+A continuación ejecute el cliente
+    ./client.sh
 
-Para ejecutar las pruebas se utilizará el comando 
+## Pruebas Unitarias
 
-    go test
+Para ejecutar las pruebas unitarias utilice el comando
+    ./pruebas.sh
