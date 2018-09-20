@@ -4,15 +4,13 @@ import sys
 
 class Client():
 
-    clientSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
     def __init__(self, host, port):
         """
         Metodo que inicializa un cliente con la direccion para el socket
         """
-        self.host = host
-        self.port = port
-        self.addr = (self.host, self.port)
+        self.addr = (host, port)
+        self.clientRunning = True
+        self.clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def setAddress(self, addr):
         """
@@ -43,13 +41,13 @@ class Client():
         """
         Metodo que se encarga de conectar al cliente con el servidor
         """
-        self.clientSock.connect(self.addr)
+        self.clientSocket.connect(self.addr)
         self.creatThreading()
-        while True:
-            msg = sys.stdin.readline()
-            if '_salir' in msg:
-                self.clientSock.close()
-                sys.exit()
+        while self.clientRunning:
+            msg = input()
+            if 'DISCONNECT' in msg:
+                self.clientRunning = False
+                self.clientSocket.send("DISCONNECT".encode("utf8"))
             else:
                 self.msgSend(msg)
 
@@ -66,22 +64,23 @@ class Client():
         """
         Metodo que se encarga de recivir los mensajes del servidor
         """
-        while True:
+        while self.clientRunning:
             try:
-                msg = self.clientSock.recv(1024).decode("utf8")
+                msg = self.clientSocket.recv(1024).decode("utf8")
                 if msg:
                     print(msg)
             except:
-                pass
+                print("El servidor se cayo.")
+                self.clientRunning = False
 
     def msgSend(self, msg):
         """
         Metodo que se encarga de enviar mensajes al servidor y cliente
         """
-        self.clientSock.send(msg.encode("utf8"))
+        self.clientSocket.send(msg.encode("utf8"))
         self.clearLine()
-        sys.stdout.write("<You>")
-        sys.stdout.write(msg)
+        sys.stdout.write("<You> ")
+        sys.stdout.write(msg + "\n")
         sys.stdout.flush()
 
     def clearLine(self):
@@ -91,3 +90,10 @@ class Client():
         CURSOR_UP = '\033[F'
         ERASE_LINE = '\033[K'
         print(CURSOR_UP + ERASE_LINE)
+
+if __name__ == '__main__':
+    host = str(input("Enter host: "))
+    port = int(input("Enter port: "))
+
+    client = Client(host, port)
+    client.runClient()
