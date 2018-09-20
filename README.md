@@ -23,8 +23,12 @@ Para ejecutar el chat, primero tiene que ejecutar el servidor utilizando el sigu
 A continuación ejecute el cliente con el comando
 
     ./client.sh
-    
-La documentación se generará en los comandos anteriores 
+
+## Documentación
+
+La documentación se generará con el siguiente comando
+
+    ./doc.sh
 
 ## Pruebas Unitarias
 
