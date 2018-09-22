@@ -5,8 +5,8 @@
 * Modelado y Programación
 * Becerril Torres Teresa
 
-En este proyecto se realizará un chat en Python, en el cual crearemos un servidor
-para podamos interactuar con los clientes, los clientes tendran una interfaz gráfica.
+En este proyecto se realizará un chat en Python, para el cual crearemos
+un servidor-cliente, utilizando socket y threadings, basandose en el patrón MVC.
 
 ## Requisitos
 
@@ -15,12 +15,19 @@ para podamos interactuar con los clientes, los clientes tendran una interfaz gr�
 * Pruebas Unitarias: unittest
 * interfaz gráfica: Tkinter
 
+## Clonar chat
+Para clonar el chat utilice el siguiente comando
+
+    https://github.com/Terebece/Proyecto1.git
+
 ## Ejecutar chat
-Para ejecutar el chat, primero tiene que ejecutar el servidor utilizando el siguiente comando
+Una vez que lo haya clonado, para ejecutar el chat lo primero que tiene que
+ejecutar es el servidor utilizando el siguiente comando
 
-    ./server.sh
+    ./server.sh 1234
 
-A continuación ejecute el cliente con el comando
+A continuación, cada vez que quiera ejecutar un cliente utilice el siguiente
+comando
 
     ./client.sh
 
