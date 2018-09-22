@@ -4,6 +4,7 @@
 * Facultad de Ciencias
 * Modelado y Programación
 * Becerril Torres Teresa
+* Número de cuenta: 315045132
 
 En este proyecto se realizará un chat en Python, para el cual crearemos
 un cliente-servidor utilizando sockets y threadings, basandose en el patrón MVC.
@@ -24,12 +25,18 @@ Para clonar el chat utilice el siguiente comando
 Una vez que lo haya clonado, para ejecutar el chat lo primero que tiene que
 ejecutar es el servidor utilizando el siguiente comando
 
-    ./server.sh 1234
+    ./server.sh 
 
 A continuación, cada vez que quiera ejecutar un cliente utilice el siguiente
 comando
 
     ./client.sh
+    
+    Enter host: 0.0.0.0
+    Enter port: 1234
+
+En host puede ir cualquier dirección IP, ya que el servidor esta adaptado para
+aceptar cualquier dirección IP.
 
 ## Documentación
 
