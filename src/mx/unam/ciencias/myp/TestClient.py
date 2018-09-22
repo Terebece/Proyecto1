@@ -2,8 +2,8 @@ import unittest
 import threading
 import socket
 import sys
-from myp import Client
-from myp import Server
+import Client
+import Server
 
 class TestCliente(unittest.TestCase):
 
