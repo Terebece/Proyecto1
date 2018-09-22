@@ -13,7 +13,7 @@ class TestServer(unittest.TestCase):
         Prueba unitaria para getAddress.
         """
         self.server = Server.Server("localhost", 3456)
-        self.server.setAddress("localhost", 3459)
+        self.server.setAddress(("localhost", 3459))
         self.assertEqual(("localhost", 3459), self.server.getAddress())
         self.server.getSocket().close()
 
