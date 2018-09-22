@@ -78,7 +78,7 @@ class Server():
 
     def creatThreading(self):
         """
-        Metodo que se encarga de crear el hilo de ejecucion para que el servidor
+        Metodo que se encarga de crear dos hilos de ejecucion para que el servidor
         pueda aceptar y procesar los mensajes de los clientes
         """
         accept = threading.Thread(target = self.acceptConn)
@@ -91,6 +91,9 @@ class Server():
         process.start()
 
     def acceptConn(self):
+        """
+        Metodo que acepta las conexiones de los clientes.
+        """
         while True:
             try:
                 conn, addr = self.serverSocket.accept()
@@ -144,6 +147,9 @@ class Server():
                         pass
 
     def creatRoom(self, roomname, client):
+        """
+        Metodo que crea una sala.
+        """
         if client.getIdentified() != False:
             room = Room.Room(roomname, client.getName())
             self.rooms.append(room)
@@ -154,11 +160,17 @@ class Server():
             client.getConn().send(inv.encode("utf8"))
 
     def disconnect(self, client):
+        """
+        Metodo auxiliar que desconecta a un cliente.
+        """
         response = "Saliendo del servidor"
         client.getConn().send(response.encode("utf8"))
         print("%s se desconecto" % client.getName())
 
     def help(self, client):
+        """
+        Metodo auxiliar que nos regresa los comandos del chat.
+        """
         h = "...CREATEROOM roomname\n" + "...DISCONNECT\n" + "...HELP\n"
         h += "...IDENTIFY username\n" +"...INVITE roomname username1 username2,...\n"
         h += "...JOINROOM roomname\n" + "...MESSAGE username messageContent\n"
@@ -167,6 +179,9 @@ class Server():
         client.getConn().send(h.encode("utf8"))
 
     def identify(self, msg, client):
+        """
+        Metodo auxiliar que identifica a los cliente.
+        """
         name = msg.replace("IDENTIFY ", "")
         for c in self.clients:
             if c.getName() == name:
@@ -181,6 +196,9 @@ class Server():
             client.getConn().send(h.encode("utf8"))
 
     def invite(self, guestU, client):
+        """
+        Metodo auxiliar que invita clientes a una sala.
+        """
         if client.getIdentified() != False:
             guestU = guestU.replace("INVITE ", "")
             listUsers = guestU.split()
@@ -196,6 +214,9 @@ class Server():
             client.getConn().send(inv.encode("utf8"))
 
     def joinr(self, roomname, client):
+        """
+        Metodo auxiliar que acepta una invitacion a una sala.
+        """
         if client.getIdentified() != False:
             for room in self.rooms:
                 if room.getName() == roomname:
@@ -208,6 +229,9 @@ class Server():
             client.getConn().send(inv.encode("utf8"))
 
     def message(self, username, msg, client):
+        """
+        Metodo auxiliar que envia mensajes privados.
+        """
         if client.getIdentified() != False:
             found = False
             for c in self.clients:
@@ -225,6 +249,9 @@ class Server():
             client.getConn().send(inv.encode("utf8"))
 
     def publicMsg(self, msg, client):
+        """
+        Metodo auxiliar que envia un mensaje publico.
+        """
         if client.getIdentified() != False:
             msg = msg.replace("PUBLICMESSAGE", "")
             auxMsg = "<" + client.getName() + ">" + msg
@@ -242,6 +269,9 @@ class Server():
             client.getConn().send(inv.encode("utf8"))
 
     def rooMsg(self, roomname, msg, client):
+        """
+        Metodo auxiliar que envia un mensaje a la sala.
+        """
         if client.getIdentified() != False:
             msg = msg.replace("ROOMESSAGE" + roomname, "")
             auxMsg = "<" + client.getName() + ">" + msg
@@ -255,6 +285,9 @@ class Server():
             client.getConn().send(inv.encode("utf8"))
 
     def status(self, status, client):
+        """
+        Metodo auxiliar que cambia el estado de un cliente.
+        """
         if client.getIdentified() != False:
             if msg.find("ACTIVE", 8, 13) != -1:
                 client.setStatus("ACTIVE")
@@ -272,6 +305,9 @@ class Server():
             client.getConn().send(inv.encode("utf8"))
 
     def users(self, client):
+        """
+        Metodo auxiliar que le envia la lista de clientes en el servidor a un cliente.
+        """
         if client.getIdentified() != False:
             NoClient = 0
             response = "Lista de usuarios\n"
