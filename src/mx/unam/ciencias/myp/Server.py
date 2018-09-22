@@ -12,13 +12,13 @@ class Server():
 
     def __init__(self, host, port):
         """
-        Metodo que inicializa el servidor con la direccion que va a tener el
-        servidor y una lista de los clientes que se van a ir conectando
+        Función que inicializa el servidor con la dirección que va a tener el
+        servidor, una lista de los clientes que se van a ir conectando, una
+        lista de las salas del servidor
         """
         self.addr = (host, port)
         self.serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.clients = []
-        self.clientsa = []
         self.rooms = []
         self.clientConnected = True
         self.verify = False
@@ -26,32 +26,32 @@ class Server():
 
     def getAddress(self):
         """
-        Metodo que regresa la direccion del servidor
+        Función que regresa la dirección del servidor
         """
         return self.addr
 
     def setAddress(self, addr):
         """
-        Metodo que define una nueva direccion al servidor
+        Función que define una nueva dirección al servidor
         """
         self.addr = addr
 
     def setSocket(self, socket):
         """
-        Metodo que define un nuevo socket para el servidor
+        Función que define un nuevo socket para el servidor
         """
         self.serverSocket.close()
         self.serverSocket = socket
 
     def getSocket(self):
         """
-        Metodo que regresa el socket del servidor
+        Función que regresa el socket del servidor
         """
         return self.serverSocket
 
     def runServer(self):
         """
-        Metodo que crea el servidor y lo deja en ejecucion para que los clientes
+        Función que crea el servidor y lo deja en ejecución para que los clientes
         se conecten a el
         """
         self.creatSocket()
@@ -66,7 +66,7 @@ class Server():
 
     def creatSocket(self):
         """
-        Metodo que crea un socket para el servidor
+        Función que crea un socket para el servidor
         """
         self.serverSocket.bind(self.addr)
         self.serverSocket.listen(100)
@@ -78,7 +78,7 @@ class Server():
 
     def creatThreading(self):
         """
-        Metodo que se encarga de crear dos hilos de ejecucion para que el servidor
+        Función que se encarga de crear dos hilos de ejecución para que el servidor
         pueda aceptar y procesar los mensajes de los clientes
         """
         accept = threading.Thread(target = self.acceptConn)
@@ -92,7 +92,7 @@ class Server():
 
     def acceptConn(self):
         """
-        Metodo que acepta las conexiones de los clientes.
+        Función que acepta las conexiones de los clientes.
         """
         while True:
             try:
@@ -109,7 +109,7 @@ class Server():
 
     def processConn(self):
         """
-        Metodo que procesa las conexiones de los clientes
+        Función que procesa las conexiones de los clientes
         """
         while True:
             if len(self.clients) > 0:
@@ -148,7 +148,7 @@ class Server():
 
     def creatRoom(self, roomname, client):
         """
-        Metodo que crea una sala.
+        Función que crea una sala.
         """
         if client.getIdentified() != False:
             room = Room.Room(roomname, client.getName())
@@ -161,7 +161,7 @@ class Server():
 
     def disconnect(self, client):
         """
-        Metodo auxiliar que desconecta a un cliente.
+        Función auxiliar que desconecta a un cliente.
         """
         response = "Saliendo del servidor"
         client.getConn().send(response.encode("utf8"))
@@ -169,7 +169,7 @@ class Server():
 
     def help(self, client):
         """
-        Metodo auxiliar que nos regresa los comandos del chat.
+        Función auxiliar que nos regresa los comandos del chat.
         """
         h = "...CREATEROOM roomname\n" + "...DISCONNECT\n" + "...HELP\n"
         h += "...IDENTIFY username\n" +"...INVITE roomname username1 username2,...\n"
@@ -180,7 +180,7 @@ class Server():
 
     def identify(self, msg, client):
         """
-        Metodo auxiliar que identifica a los cliente.
+        Función auxiliar que identifica a los cliente.
         """
         name = msg.replace("IDENTIFY ", "")
         for c in self.clients:
@@ -197,7 +197,7 @@ class Server():
 
     def invite(self, guestU, client):
         """
-        Metodo auxiliar que invita clientes a una sala.
+        Función auxiliar que invita clientes a una sala.
         """
         if client.getIdentified() != False:
             guestU = guestU.replace("INVITE ", "")
@@ -215,7 +215,7 @@ class Server():
 
     def joinr(self, roomname, client):
         """
-        Metodo auxiliar que acepta una invitacion a una sala.
+        Función auxiliar que acepta una invitación a una sala.
         """
         if client.getIdentified() != False:
             for room in self.rooms:
@@ -230,7 +230,7 @@ class Server():
 
     def message(self, username, msg, client):
         """
-        Metodo auxiliar que envia mensajes privados.
+        Función auxiliar que envia mensajes privados.
         """
         if client.getIdentified() != False:
             found = False
@@ -250,7 +250,7 @@ class Server():
 
     def publicMsg(self, msg, client):
         """
-        Metodo auxiliar que envia un mensaje publico.
+        Función auxiliar que envía un mensaje publico.
         """
         if client.getIdentified() != False:
             msg = msg.replace("PUBLICMESSAGE", "")
@@ -270,7 +270,7 @@ class Server():
 
     def rooMsg(self, roomname, msg, client):
         """
-        Metodo auxiliar que envia un mensaje a la sala.
+        Función auxiliar que envía un mensaje a la sala.
         """
         if client.getIdentified() != False:
             msg = msg.replace("ROOMESSAGE" + roomname, "")
@@ -286,7 +286,7 @@ class Server():
 
     def status(self, status, client):
         """
-        Metodo auxiliar que cambia el estado de un cliente.
+        Función auxiliar que cambia el estado de un cliente.
         """
         if client.getIdentified() != False:
             if msg.find("ACTIVE", 8, 13) != -1:
@@ -306,7 +306,7 @@ class Server():
 
     def users(self, client):
         """
-        Metodo auxiliar que le envia la lista de clientes en el servidor a un cliente.
+        Función auxiliar que le envía la lista de clientes en el servidor a un cliente.
         """
         if client.getIdentified() != False:
             NoClient = 0

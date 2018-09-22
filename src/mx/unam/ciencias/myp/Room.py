@@ -3,7 +3,7 @@ class Room():
     def __init__(self, roomname, creator):
         """Constructor que inicializa una sala con: su nombre, el cliente que lo
         creo, una lista de los clientes que fueron invitados y una lista de los
-        clientes que aceptaron la invitacion a la sala."""
+        clientes que aceptaron la invitación a la sala."""
         self.roomname = roomname
         self.creator = creator
         self.guestUser = []
@@ -11,31 +11,31 @@ class Room():
 
     def getRoomName(self):
         """
-        Metodo que regresa el nombre de la sala.
+        Función que regresa el nombre de la sala.
         """
         return self.roomname
 
     def setRoomName(self, roomname):
         """
-        Metodo que cambia el nombre de la sala.
+        Función que cambia el nombre de la sala.
         """
         self.roomname = roomname
 
     def getGuestUser(self):
         """
-        Metodo que regresa la lista de los clientes invitados a la sala.
+        Función que regresa la lista de los clientes invitados a la sala.
         """
         return self.guestUser
 
     def getUsersInRoom(self):
         """
-        Metodo que regresa la lista de los clientes en la sala.
+        Función que regresa la lista de los clientes en la sala.
         """
         return self.userInRoom
 
     def addGuestUsers(self, creator, inv):
         """
-        Metodo que agrega a los clientes invitados por el creador a la lista
+        Función que agrega a los clientes invitados por el creador a la lista
         de invitados.
         """
         if creator == self.creator:
@@ -45,14 +45,14 @@ class Room():
 
     def addUsersInRoom(self, user):
         """
-        Metodo que agrega a los clientes que aceptaron la invitacion para unirse
+        Función que agrega a los clientes que aceptaron la invitación para unirse
         a la sala.
         """
         self.userInRoom.append(user)
 
     def msgInRoom(self, client, msg):
         """
-        Metodo para enviar mensajes en la sala.
+        Función para enviar mensajes en la sala.
         """
         for user in self.userInRoom:
             if user != client:

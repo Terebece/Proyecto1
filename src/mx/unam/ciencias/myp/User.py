@@ -5,8 +5,8 @@ class User():
 
     def __init__(self, connection, address):
         """
-        Constructor que inicializa a un usuario con: su conexion, su direccion,
-        su estado, una bandera para saber si el usuario ya se identifico y pueda
+        Constructor que inicializa a un usuario con: su conexión, su dirección,
+        su estado, una bandera para saber si el usuario ya se identificó y pueda
         utilizar el chat y el nombre del usuario.
         """
         self.connection = connection
@@ -17,56 +17,56 @@ class User():
 
     def setConn(self, connection):
         """
-        Metodo que define una nueva conexion para el usuario.
+        Función que define una nueva conexión para el usuario.
         """
         self.connection = connection
 
     def getConn(self):
         """
-        Metodo que regresa la conexion del usuario.
+        Función que regresa la conexión del usuario.
         """
         return self.connection
 
     def setAddress(self, address):
         """
-        Metodo que define una nueva direccion para el usuario.
+        Función que define una nueva dirección para el usuario.
         """
         self.address = address
 
     def getAddress(self):
         """
-        Metodo que regresa la direccion del usuario.
+        Función que regresa la dirección del usuario.
         """
         return self.address
 
     def getName(self):
         """
-        Metodo que regresa el nombre del usuario.
+        Función que regresa el nombre del usuario.
         """
         return self.name
 
     def setName(self, name):
         """
-        Metodo que define un nuevo nombre para el usuario.
+        Función que define un nuevo nombre para el usuario.
         """
         self.name = name
         self.identified = True
 
     def getIdentified(self):
         """
-        Metodo que nos regresa si el usuario ya se identifico.
+        Función que nos regresa si el usuario ya se identificó.
         """
         return self.identified
 
     def getStatus(self):
         """
-        Metodo que regresa el estado del usuario.
+        Función que regresa el estado del usuario.
         """
         return self.userstatus
 
     def setStatus(self, status):
         """
-        Metodo que define un nuevo estado para el usuario.
+        Función que define un nuevo estado para el usuario.
         """
         for s in self.userstatus:
             if s == status:

@@ -6,7 +6,7 @@ class Client():
 
     def __init__(self, host, port):
         """
-        Constructor que inicializa un cliente con la direccion que utilizara para
+        Constructor que inicializa un cliente con la dirección que utilizara para
         conectarse con el servidor.
         """
         self.addr = (host, port)
@@ -15,32 +15,32 @@ class Client():
 
     def setAddress(self, addr):
         """
-        Metodo que define la direccion con la cual se va conectar al servidor.
+        Función que define la dirección con la cual se va conectar al servidor.
         """
         self.addr = addr
 
     def getAddress(self):
         """
-        Metodo que regresa la direccion con la cual se va conectar al servidor.
+        Función que regresa la dirección con la cual se va conectar al servidor.
         """
         return self.addr
 
     def setSocket(self, socket):
         """
-        Metodo que define un nuevo socket para el cliente.
+        Función que define un nuevo socket para el cliente.
         """
         self.clientSock.close()
         self.clientSock = socket
 
     def getSocket(self):
         """
-        Metodo que regresa el socket.
+        Función que regresa el socket.
         """
         return self.clientSock
 
     def runClient(self):
         """
-        Metodo que se encarga de conectar al cliente con el servidor.
+        Función que se encarga de conectar al cliente con el servidor.
         """
         self.clientSocket.connect(self.addr)
         self.creatThreading()
@@ -54,7 +54,7 @@ class Client():
 
     def creatThreading(self):
         """
-        Metodo que se encarga de crear un hilo de ejecucion para que el cliente
+        Función que se encarga de crear un hilo de ejecución para que el cliente
         pueda recivir mensajes del Servidor.
         """
         msgRecv = threading.Thread(target=self.msgRecv)
@@ -63,7 +63,7 @@ class Client():
 
     def msgRecv(self):
         """
-        Metodo que se encarga de recivir los mensajes del servidor.
+        Función que se encarga de recivir los mensajes del servidor.
         """
         while self.clientRunning:
             try:
