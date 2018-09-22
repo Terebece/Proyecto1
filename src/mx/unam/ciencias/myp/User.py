@@ -35,13 +35,13 @@ class User():
 
     def getAddress(self):
         """
-        Metodo que regresa la direccion del usuarioself.
+        Metodo que regresa la direccion del usuario.
         """
         return self.address
 
     def getName(self):
         """
-        Metodo que regresa el nombre del Usuario.
+        Metodo que regresa el nombre del usuario.
         """
         return self.name
 

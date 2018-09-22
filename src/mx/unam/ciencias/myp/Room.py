@@ -35,7 +35,7 @@ class Room():
 
     def addGuestUsers(self, creator, inv):
         """
-        Metodo que agrega a los clientes invitados por el creador en la lista
+        Metodo que agrega a los clientes invitados por el creador a la lista
         de invitados.
         """
         if creator == self.creator:
@@ -45,7 +45,7 @@ class Room():
 
     def addUsersInRoom(self, user):
         """
-        Metodo que agrega a los clientes que aceptaron la invitacion de unirse
+        Metodo que agrega a los clientes que aceptaron la invitacion para unirse
         a la sala.
         """
         self.userInRoom.append(user)
