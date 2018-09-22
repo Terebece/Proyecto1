@@ -3,9 +3,12 @@ import sys
 import threading
 import User
 import Room
+import PrivateRoom
 import EventoConexion
 
 class Server():
+
+    userstatus = ["ACTIVE", "AWAY", "BUSY"]
 
     def __init__(self, host, port):
         """
@@ -18,6 +21,7 @@ class Server():
         self.clientsa = []
         self.rooms = []
         self.clientConnected = True
+        self.verify = False
 
 
     def getAddress(self):
@@ -77,25 +81,16 @@ class Server():
         Metodo que se encarga de crear el hilo de ejecucion para que el servidor
         pueda aceptar y procesar los mensajes de los clientes
         """
+        accept = threading.Thread(target = self.acceptConn)
         process = threading.Thread(target=self.processConn)
+
+        accept.daemon = True
+        accept.start()
+
         process.daemon = True
         process.start()
 
-    def msgAll(self, msg, client):
-        """
-        Metodo que envia mensaje a todos los clientes conectados al servidor
-        """
-        for client1 in self.clients:
-            try:
-                if client1 != client:
-                    client1.getConn().send(msg.encode("utf8"))
-            except:
-                self.clients.remove(client1)
-
-    def processConn(self):
-        """
-        Metodo que procesa las conexiones de los clientes
-        """
+    def acceptConn(self):
         while True:
             try:
                 conn, addr = self.serverSocket.accept()
@@ -109,33 +104,38 @@ class Server():
             except socket.error:
                 pass
 
+    def processConn(self):
+        """
+        Metodo que procesa las conexiones de los clientes
+        """
+        while True:
             if len(self.clients) > 0:
                 for client in self.clients:
                     try:
                         msg = client.getConn().recv(1024).decode("utf8")
                         if msg:
                             aux = msg.split(" ")
-                            if "CREATEROOM" in msg:
+                            if  msg.find("CREATEROOM", 0, 10) != -1:
                                 self.creatRoom(aux[1], client)
-                            elif "DISCONNECT" in msg:
+                            elif msg == "DISCONNECT":
                                 sefl.disconnect(client)
-                            elif "HELP" in msg:
+                            elif msg == "HELP":
                                 self.help(client)
-                            elif "IDENTIFY" in msg:
-                                self.nameClient(client)
-                            elif "INVITE" in msg:
+                            elif msg.find("IDENTIFY", 0, 8) != -1:
+                                self.identify(msg, client)
+                            elif msg.find("INVITE", 0, 6) != -1:
                                 self.invite(msg, client)
-                            elif "JOINROOM" in msg:
+                            elif msg.find("JOINROOM", 0, 8) != -1:
                                 self.joinr(aux[1], client)
-                            elif "MESSAGE" in msg:
+                            elif msg.find("MESSAGE", 0, 7) != -1:
                                 self.message(aux[1], msg, client)
-                            elif  msg.find("PUBLICMESSAGE", 0, 13) != -1:
+                            elif msg.find("PUBLICMESSAGE", 0, 13) != -1:
                                 self.publicMsg(msg, client)
-                            elif "ROOMESSAGE" in msg:
+                            elif msg.find("ROOMESSAGE", 0, 10) != -1:
                                 self.rooMsg(aux[1], msg, client)
-                            elif "STATUS" in msg:
-                                self.status(aux[1], client)
-                            elif "USERS" in msg:
+                            elif msg.find("STATUS", 0, 6) != -1:
+                                self.status(msg, client)
+                            elif msg.find("USERS", 0, 5) != -1:
                                 self.users(client)
                             else:
                                 inva = "Mensaje invalido, escribe HELP para saber los comandos del chat"
@@ -147,6 +147,8 @@ class Server():
         if client.getIdentified() != False:
             room = Room.Room(roomname, client.getName())
             self.rooms.append(room)
+            ms = "Has creado la sala %s" % roomname
+            client.getConn().send(ms.encode("utf8"))
         else:
             inv = "Identificate primero para poder crear una sala"
             client.getConn().send(inv.encode("utf8"))
@@ -155,84 +157,69 @@ class Server():
         response = "Saliendo del servidor"
         client.getConn().send(response.encode("utf8"))
         print("%s se desconecto" % client.getName())
-        client.setStatus("DISCONNECT")
-        self.discont()
 
     def help(self, client):
-        help = self.msgHelp()
-        client.getConn().send(help.decode("utf8"))
+        h = "...CREATEROOM roomname\n" + "...DISCONNECT\n" + "...HELP\n"
+        h += "...IDENTIFY username\n" +"...INVITE roomname username1 username2,...\n"
+        h += "...JOINROOM roomname\n" + "...MESSAGE username messageContent\n"
+        h += "...PUBLICMESSAGE messageContent\n" + "...ROOMESSAGE roomname "
+        h += "messageContent\n" + "...STATUS userstatus\n" + "...USERS"
+        client.getConn().send(h.encode("utf8"))
 
-    def invite(self, gustU, client):
-        guestU = guestU.replace("INVITE ", "")
-        listUsers = guestU.split()
-        roomname = listUsers.pop(0)
-        roomp = None
-        for room in self.__rooms:
-            if room.getRoomName() == roomname:
-                room = roomp
-        roomp.addGuestUsers(client, listUsers)
-        h = "%s te invito a la sala %s" % (client.getName(), roomname)
-        for c in roomp.getGuestUser():
-            c.getConn().send(h.encode("utf8"))
+    def identify(self, msg, client):
+        name = msg.replace("IDENTIFY ", "")
+        for c in self.clients:
+            if c.getName() == name:
+                self.verify = True
+        if self.verify == False:
+            client.setName(name)
+            ms = "Te has identificado como %s" % name
+            client.getConn().send(ms.encode("utf8"))
+            self.connected(name)
+        else:
+            h = "Ese nombre no esta disponible, por favor introduce otro"
+            client.getConn().send(h.encode("utf8"))
 
-    def nameClient(self, client):
-        try:
-            name = client.getConn().recv(1024).decode("utf8")
-            if "IDENTIFY" in name:
-                name = replace("IDENTIFY ", "")
-                for c in self.clients:
-                    if c.getName() == name:
-                        self.verify = True
-                    if self.verify == False:
-                        client.setName(name)
-                        self.clients.append(name)
-                        self.connected(name)
-                    else:
-                        h = "Ese nombre no esta disponible, por favor introduce otro"
-                        client.getConn().send(h.encode("utf8"))
-                        self.nameClient()
-                else:
-                    pass
-        except:
-            pass
-
-    def connected(self, name):
-        for client in self.clients:
-            try:
-                client.getConn.send("Se conecto %s" % name).encode("utf8")
-            except:
-                pass
-
-    def  discont(self, name):
-        for client in self.clients:
-            try:
-                client.getConn.send("Se desconecto %s" % name).encode("utf8")
-            except:
-                pass
+    def invite(self, guestU, client):
+        if client.getIdentified() != False:
+            guestU = guestU.replace("INVITE ", "")
+            listUsers = guestU.split()
+            roomname = listUsers.pop(0)
+            for room in self.rooms:
+                if room.getRoomName() == roomname:
+                    room.addGuestUsers(client, listUsers)
+                    h = "%s te invito a la sala %s" % (client.getName(), roomname)
+                    for c in room.getGuestUser():
+                        c.getConn().send(h.encode("utf8"))
+        else:
+            inv = "Identificate para poder invitar personas a una sala"
+            client.getConn().send(inv.encode("utf8"))
 
     def joinr(self, roomname, client):
         if client.getIdentified() != False:
-            roomp = None
             for room in self.rooms:
                 if room.getName() == roomname:
-                    roomp = room
-            if client in roomp.getGuestUser():
-                roomp.addUsersInRoom(client)
+                    if client in room.getGuestUser():
+                        room.addUsersInRoom(client)
+                        ms = "Te has unido a la sala %s" % roomname
+                        client.getConn().send(ms.encode("utf8"))
         else:
             inv = "Identificate para poder aceptar las invitaciones a salas"
+            client.getConn().send(inv.encode("utf8"))
 
     def message(self, username, msg, client):
         if client.getIdentified() != False:
             found = False
-            for c in self.__clients:
+            for c in self.clients:
                 if username == c.getName():
                     if client != c:
-                        msg = msg.replace("MESSAGE" + username, "")
+                        aux = "MESSAGE %s" % username
+                        msg = msg.replace(aux, "")
                         auxMsg = "<" + client.getName() + ">" + msg
-                        c.getConn().send(auxMsg.encode('utf8'))
+                        c.getConn().send(auxMsg.encode("utf8"))
                         found = True
                     if(not found):
-                        client.send('Usuario invalido.'.encode('utf8'))
+                        client.send('Usuario invalido.'.encode("utf8"))
         else:
             inv = "Identificate para poder enviar mensajes privados"
             client.getConn().send(inv.encode("utf8"))
@@ -252,6 +239,7 @@ class Server():
                     self.clients.remove(conn)
         else:
             inv = "Identificate para poder enviar mensajes publicos"
+            client.getConn().send(inv.encode("utf8"))
 
     def rooMsg(self, roomname, msg, client):
         if client.getIdentified() != False:
@@ -264,33 +252,36 @@ class Server():
             room.msgInRoom(client, msg)
         else:
             inv = "Identificate primero para poder mensejes a una sala"
+            client.getConn().send(inv.encode("utf8"))
 
     def status(self, status, client):
         if client.getIdentified() != False:
-            client.setStatus(status)
+            if msg.find("ACTIVE", 8, 13) != -1:
+                client.setStatus("ACTIVE")
+                client.getConn().send("Tu estado es: ACTIVE".encode("utf8"))
+            elif status.find("AWAY", 8, 11) != -1:
+                client.setStatus("AWAY")
+                client.getConn().send("Tu estado es: AWAY".encode("utf8"))
+            elif msg.find("BUSY", 8, 11) != -1:
+                client.setStatus("BUSY")
+                client.getConn().send("Tu estado es: BUSY".encode("utf8"))
+            else:
+                client.getConn().send("Estado invalido, por favor introduce alguno de los estados validos: ACTIVE, AWAY, BUSY")
         else:
             inv = "Identificate primero para poder cambiar de estado"
             client.getConn().send(inv.encode("utf8"))
 
-    def user(self, client):
+    def users(self, client):
         if client.getIdentified() != False:
             NoClient = 0
             response = "Lista de usuarios\n"
-            for client in self.clients:
+            for clien in self.clients:
                 NoClient += 1
-                response = response + str(NoClient) + ". " + client.getName() + "\n"
+                response = response + str(NoClient) + ". " + clien.getName() + "\n"
             client.getConn().send(response.encode("utf8"))
         else:
             inv = "Identificate primero para poder ver la lista de usuarios"
             client.getConn().send(inv.encode("utf8"))
-
-def msgHelp(self):
-        h = "...CREATEROOM roomname\n" + "...DISCONNECT\n" + "...HELP\n"
-        h += "...INVITE roomname username1 username2,...\n"
-        h += "...JOINROOM roomname\n" + "...MESSAGE username messageContent\n"
-        h += "...PUBLICMESSAGE messageContent\n" + "...ROOMESSAGE roomname"
-        h += "messageContent\n" + "...STATUS userstatus" + "...USERS"
-        return h
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
