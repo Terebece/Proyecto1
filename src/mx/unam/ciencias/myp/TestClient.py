@@ -42,12 +42,12 @@ class TestCliente(unittest.TestCase):
         """
         self.clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client = Client.Client("localhost", 3456)
-        self.client.setSock(self.clientSocket)
+        self.client.setSocket(self.clientSocket)
         self.assertEqual(self.clientSocket, self.client.getSocket())
         self.clientSocket.close()
         self.client.getSocket().close()
 
-    def testRunClient():
+    def testRunClient(self):
         """
         Pruebas unitarias para runClient.
         """
