@@ -6,7 +6,7 @@
 * Becerril Torres Teresa
 
 En este proyecto se realizará un chat en Python, para el cual crearemos
-un servidor-cliente, utilizando socket y threadings, basandose en el patrón MVC.
+un cliente-servidor utilizando sockets y threadings, basandose en el patrón MVC.
 
 ## Requisitos
 
