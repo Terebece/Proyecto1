@@ -3,8 +3,7 @@ import sys
 import threading
 import User
 import Room
-import PrivateRoom
-import EventoConexion
+import ConnEvent
 
 class Server():
 
