@@ -29,14 +29,14 @@ class Client():
         """
         Función que define un nuevo socket para el cliente.
         """
-        self.clientSock.close()
-        self.clientSock = socket
+        self.clientSocket.close()
+        self.clientSocket = socket
 
     def getSocket(self):
         """
         Función que regresa el socket.
         """
-        return self.clientSock
+        return self.clientSocket
 
     def runClient(self):
         """
