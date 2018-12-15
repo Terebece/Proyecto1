@@ -1,10 +1,10 @@
 # Proyecto1: Chat con Python
 
-* Universidad Nacional Autónoma de México
-* Facultad de Ciencias
-* Modelado y Programación
-* Becerril Torres Teresa
-* Número de cuenta: 315045132
+Universidad Nacional Autónoma de México
+Facultad de Ciencias
+Modelado y Programación
+Becerril Torres Teresa
+Número de cuenta: 315045132
 
 En este proyecto se realizará un chat en Python, para el cual crearemos
 un cliente-servidor utilizando sockets y threadings, basandose en el patrón MVC.
